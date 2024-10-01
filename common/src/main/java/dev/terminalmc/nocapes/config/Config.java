@@ -30,7 +30,7 @@ public class Config {
 
     public static Map<String, Boolean> defaultCapes() {
         Map<String, Boolean> capes = new LinkedHashMap<>();
-        for (String kv : NoCapes.CAPES) capes.put(kv, true);
+        for (String id : NoCapes.CAPES) capes.put(id, !id.equals("all"));
         return capes;
     }
     

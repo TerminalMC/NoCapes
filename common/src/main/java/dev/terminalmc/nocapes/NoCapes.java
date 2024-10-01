@@ -62,9 +62,9 @@ public class NoCapes {
 
     public static void init() {
         Config config = Config.getAndSave();
-        for (String kv : CAPES) {
-            if (!config.options.capes.containsKey(kv)) {
-                config.options.capes.put(kv, true);
+        for (String id : CAPES) {
+            if (!config.options.capes.containsKey(id)) {
+                config.options.capes.put(id, true);
             }
         }
     }
