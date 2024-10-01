@@ -27,7 +27,7 @@ That's all.
 
 </center></div>
 
-#### Dependencies
+### Dependencies
 
 Fabric: [Fabric API](https://modrinth.com/mod/P7dR8mSH), [ModMenu](https://modrinth.com/mod/mOgUt4GM), [Cloth Config API](https://modrinth.com/mod/9s6osm5g)
 
