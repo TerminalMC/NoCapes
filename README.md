@@ -17,12 +17,6 @@ That's all.
 [![Download on Modrinth](https://img.shields.io/modrinth/dt/8mBskugS?label=Download%20on%20Modrinth&logo=modrinth&logoColor=%2300AF5C)](https://modrinth.com/mod/8mBskugS)
 [![Download on GitHub](https://img.shields.io/github/downloads/TerminalMC/NoCapes/total?label=Download%20on%20GitHub&logo=github&logoColor=white)](https://github.com/TerminalMC/NoCapes)
 
-</center></div>
-
-### About
-
-<div align="center"><center>
-
 <img src="https://raw.githubusercontent.com/TerminalMC/NoCapes/HEAD/assets/images/config_01.png" style="width:80%;">
 
 </center></div>
