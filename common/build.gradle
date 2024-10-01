@@ -10,7 +10,6 @@ dependencies {
 
     // Mod dependencies use NeoForge version to avoid remapping complications
     implementation("me.shedaniel.cloth:cloth-config-neoforge:${clothconfig_version}")
-    implementation("maven.modrinth:1eAoo2KR:${yacl_version_neoforge}")
 }
 
 neoForge {

@@ -4,8 +4,8 @@ plugins {
 }
 
 dependencies {
+    implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:${mixinextras_version}"))
     implementation("me.shedaniel.cloth:cloth-config-neoforge:${clothconfig_version}")
-    implementation("maven.modrinth:1eAoo2KR:${yacl_version_neoforge}")
 }
 
 neoForge {
