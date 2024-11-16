@@ -1,13 +1,11 @@
 {
   "nocapes.name": "NoCapes",
 
-  "modmenu.descriptionTranslation.nocapes": "Disables rendering of any/all Minecraft capes.",
-  "fml.menu.mods.info.description.nocapes": "Disables rendering of any/all Minecraft capes.",
+  "modmenu.descriptionTranslation.nocapes": "${mod_description}",
+  "fml.menu.mods.info.description.nocapes": "${mod_description}",
 
-  "message.nocapes.go_modrinth": "View on Modrinth",
-  "message.nocapes.install_cloth": "Install Cloth Config API to access mod options",
-
-  "screen.nocapes.options": "NoCapes Options",
+  "message.nocapes.viewModrinth": "View on Modrinth",
+  "message.nocapes.installCloth": "Install Cloth Config API to access mod options",
 
   "option.nocapes.show": "Show",
   "option.nocapes.hide": "Hide",

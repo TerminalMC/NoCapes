@@ -1,3 +1,19 @@
+/*
+ * Copyright 2024 TerminalMC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package dev.terminalmc.nocapes;
 
 import com.mojang.authlib.GameProfile;
@@ -6,7 +22,6 @@ import dev.terminalmc.nocapes.config.Config;
 import dev.terminalmc.nocapes.util.ModLogger;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
@@ -107,12 +122,11 @@ public class NoCapes {
     }
 
     private static void sendNewCapeMessages(String capeId) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player == null) return;
+        Minecraft mc = Minecraft.getInstance();
         MutableComponent msg = PREFIX.copy();
         msg.append(localized("message", "unknown",
                 capeId.substring(capeId.length() - 5)));
-        player.sendSystemMessage(msg);
+        mc.gui.getChat().addMessage(msg);
 
         msg = PREFIX.copy();
         msg.append(localized("message", "copy")).withStyle(msg.getStyle()
@@ -120,7 +134,7 @@ public class NoCapes {
                         localized("message", "copy.tooltip")))
                 .withClickEvent(new ClickEvent(
                         ClickEvent.Action.COPY_TO_CLIPBOARD, capeId)));
-        player.sendSystemMessage(msg);
+        mc.gui.getChat().addMessage(msg);
 
         msg = PREFIX.copy();
         msg.append(localized("message", "contact")).withStyle(msg.getStyle()
@@ -128,6 +142,6 @@ public class NoCapes {
                         localized("message", "contact.tooltip")))
                 .withClickEvent(new ClickEvent(
                         ClickEvent.Action.OPEN_URL, "https://terminalmc.dev")));
-        player.sendSystemMessage(msg);
+        mc.gui.getChat().addMessage(msg);
     }
 }
