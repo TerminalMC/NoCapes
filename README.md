@@ -2,7 +2,7 @@
 
 ## Archival Notice
 
-This project will no longer receive normal updates, but requests will still be considered.
+This project will no longer receive normal updates, but requests may still be considered.
 
 <img alt="Icon" width=100 src="https://raw.githubusercontent.com/TerminalMC/NoCapes/HEAD/common/src/main/resources/assets/nocapes/icon.png">
 
