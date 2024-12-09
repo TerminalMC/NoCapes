@@ -29,12 +29,10 @@ Fabric: [Fabric API](https://modrinth.com/mod/P7dR8mSH), [ModMenu](https://modri
 
 NeoForge: [Cloth Config API](https://modrinth.com/mod/9s6osm5g)
 
-### License
-
-[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
-
 ### Contact
 
 [![Discord Server](https://img.shields.io/discord/1103153365216669797?logo=discord&label=Discord%20Server&color=%235865F2)](https://discord.terminalmc.dev)
 
 [![GitHub Issues](https://img.shields.io/github/issues/TerminalMC/NoCapes?logo=github&label=GitHub%20Issues)](https://github.com/TerminalMC/NoCapes/issues)
+
+[![License](https://img.shields.io/github/license/TerminalMC/NoCapes?label=License&logo=github&logoColor=white)](https://github.com/TerminalMC/NoCapes/blob/HEAD/LICENSE.txt)
