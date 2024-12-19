@@ -16,13 +16,11 @@
 
 package dev.terminalmc.nocapes;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import dev.terminalmc.nocapes.config.Config;
 import dev.terminalmc.nocapes.util.ModLogger;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -68,7 +66,7 @@ public class NoCapes {
             "2e002d5e1758e79ba51d08d92a0f3a95119f2f435ae7704916507b6c565a7da8",
             "ca29f5dd9e94fb1748203b92e36b66fda80750c87ebc18d6eafdb0e28cc1d05f",
     };
-    private static final Map<UUID, String> CAPE_CACHE = new HashMap<>();
+    public static final Map<ResourceLocation, String> CAPE_CACHE = new HashMap<>();
     private static boolean blockAll = false;
 
     public static void init() {
@@ -83,28 +81,12 @@ public class NoCapes {
     public static void onConfigSaved(Config config) {
         blockAll = !config.options.capes.get("all");
     }
-
-    private static @Nullable String getCapeId(GameProfile profile) {
-        UUID uuid = profile.getId();
-        @Nullable String capeId = CAPE_CACHE.get(uuid);
-
-        if (capeId == null) {
-            MinecraftProfileTexture capeTexture = Minecraft.getInstance()
-                    .getMinecraftSessionService().getTextures(profile).cape();
-            if (capeTexture != null) capeId = capeTexture.getUrl();
-            if (capeId == null || !capeId.contains("textures.minecraft.net/texture/")) return null;
-            capeId = capeId.split("/texture/")[1];
-            CAPE_CACHE.put(uuid, capeId);
-        }
-
-        return capeId;
-    }
-
-    public static boolean blockCape(GameProfile profile) {
+    
+    public static boolean blockCape(ResourceLocation texture) {
         if (blockAll) return true;
-
-        String capeId = getCapeId(profile);
-        if (capeId != null) {
+        
+        if (CAPE_CACHE.containsKey(texture)) {
+            String capeId = CAPE_CACHE.get(texture);
             @Nullable Boolean render = Config.get().options.capes.get(capeId);
             return render != null && !render;
         }
