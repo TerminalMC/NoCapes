@@ -16,6 +16,8 @@
   "message.nocapes.contact": "Then click this message to contact the developer",
   "message.nocapes.contact.tooltip": "Open link",
 
+  "option.nocapes.hideCape": "Hide Cape",
+  "option.nocapes.hideElytra": "Hide Elytra",
   "cape.nocapes.all": "All Capes",
   "cape.nocapes.2340c0e03dd24a11b15a8b33c2a7e9e32abb2051b2481d0ba7defd635ca7a933": "Migrator",
   "cape.nocapes.cd9d82ab17fd92022dbd4a86cde4c382a7540e117fae7b9a2853658505a80625": "15th Anniversary",

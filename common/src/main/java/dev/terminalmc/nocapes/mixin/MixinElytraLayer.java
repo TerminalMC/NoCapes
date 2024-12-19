@@ -28,6 +28,8 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+import static dev.terminalmc.nocapes.config.Config.options;
+
 @Mixin(ElytraLayer.class)
 public class MixinElytraLayer {
     @WrapOperation(
@@ -37,11 +39,19 @@ public class MixinElytraLayer {
                     target = "Lnet/minecraft/client/resources/PlayerSkin;capeTexture()Lnet/minecraft/resources/ResourceLocation;"
             )
     )
-    private @Nullable ResourceLocation nullIfBlocked(PlayerSkin instance, Operation<ResourceLocation> original, @Local AbstractClientPlayer player) {
+    private @Nullable ResourceLocation nullIfBlocked(PlayerSkin instance, 
+                                                     Operation<ResourceLocation> original, 
+                                                     @Local AbstractClientPlayer player) {
         // Skip the check if the cape texture wouldn't be rendered anyway
-        if (instance.capeTexture() == null || NoCapes.blockCape(player.getGameProfile())) {
-            return null;
+        if (
+                instance.capeTexture() != null 
+                && (
+                        !options().hideElytra
+                        || !NoCapes.blockCape(player.getGameProfile())
+                )
+        ) {
+            return original.call(instance);
         }
-        return original.call(instance);
+        return null;
     }
 }

@@ -40,7 +40,17 @@ public class Config {
 
     public final Options options = new Options();
 
+    public static Options options() {
+        return Config.get().options;
+    }
+
     public static class Options {
+        public static final boolean hideCapeDefault = true;
+        public boolean hideCape = hideCapeDefault;
+        
+        public static final boolean hideElytraDefault = true;
+        public boolean hideElytra = hideElytraDefault;
+        
         public Map<String, Boolean> capes = defaultCapes();
     }
 

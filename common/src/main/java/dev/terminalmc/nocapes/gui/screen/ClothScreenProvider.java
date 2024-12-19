@@ -42,6 +42,18 @@ public class ClothScreenProvider {
 
         ConfigCategory modSettings = builder.getOrCreateCategory(localized("option", "category.cape_render"));
 
+        modSettings.addEntry(eb.startBooleanToggle(
+                        localized("option", "hideCape"), options.hideCape)
+                .setDefaultValue(Config.Options.hideCapeDefault)
+                .setSaveConsumer(val -> options.hideCape = val)
+                .build());
+
+        modSettings.addEntry(eb.startBooleanToggle(
+                        localized("option", "hideElytra"), options.hideElytra)
+                .setDefaultValue(Config.Options.hideElytraDefault)
+                .setSaveConsumer(val -> options.hideElytra = val)
+                .build());
+
         for (String url : options.capes.keySet()) {
             modSettings.addEntry(eb.startBooleanToggle(
                     localized("cape", url), options.capes.get(url))
