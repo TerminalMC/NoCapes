@@ -10,12 +10,6 @@
   "option.nocapes.show": "Show",
   "option.nocapes.hide": "Hide",
 
-  "message.nocapes.unknown": "Detected unrecognized cape ending in %s",
-  "message.nocapes.copy": "Please click this message to copy the cape ID",
-  "message.nocapes.copy.tooltip": "Copy ID",
-  "message.nocapes.contact": "Then click this message to contact the developer",
-  "message.nocapes.contact.tooltip": "Open link",
-
   "option.nocapes.hideCape": "Hide Cape",
   "option.nocapes.hideElytra": "Hide Elytra",
   "cape.nocapes.all": "All Capes",

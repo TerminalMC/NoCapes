@@ -37,7 +37,6 @@ public class MixinCapeLayer {
                             AbstractClientPlayer player, float limbSwing, float limbSwingAmount, 
                             float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, 
                             Operation<Void> original) {
-        // Skip the check if the cape wouldn't be rendered anyway
         if (
                 !player.isInvisible() 
                 && player.isModelPartShown(PlayerModelPart.CAPE) 

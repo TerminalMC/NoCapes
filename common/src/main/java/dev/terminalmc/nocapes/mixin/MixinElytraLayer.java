@@ -42,7 +42,6 @@ public class MixinElytraLayer {
     private @Nullable ResourceLocation nullIfBlocked(PlayerSkin instance, 
                                                      Operation<ResourceLocation> original, 
                                                      @Local AbstractClientPlayer player) {
-        // Skip the check if the cape texture wouldn't be rendered anyway
         if (
                 instance.capeTexture() != null 
                 && (

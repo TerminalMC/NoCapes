@@ -22,15 +22,10 @@ import dev.terminalmc.nocapes.config.Config;
 import dev.terminalmc.nocapes.util.ModLogger;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-
-import static dev.terminalmc.nocapes.util.Localization.localized;
 
 public class NoCapes {
     public static final String MOD_ID = "nocapes";
@@ -109,40 +104,10 @@ public class NoCapes {
         if (blockAll) return true;
 
         String capeId = getCapeId(profile);
-        if (capeId == null) return false;
-
-        @Nullable Boolean render = Config.get().options.capes.get(capeId);
-        if (render == null) {
-            Config.get().options.capes.put(capeId, true);
-            Config.save();
-            sendNewCapeMessages(capeId);
-            return false;
-        } else {
-            return !render;
+        if (capeId != null) {
+            @Nullable Boolean render = Config.get().options.capes.get(capeId);
+            return render != null && !render;
         }
-    }
-
-    private static void sendNewCapeMessages(String capeId) {
-        Minecraft mc = Minecraft.getInstance();
-        MutableComponent msg = PREFIX.copy();
-        msg.append(localized("message", "unknown",
-                capeId.substring(capeId.length() - 5)));
-        mc.gui.getChat().addMessage(msg);
-
-        msg = PREFIX.copy();
-        msg.append(localized("message", "copy")).withStyle(msg.getStyle()
-                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                        localized("message", "copy.tooltip")))
-                .withClickEvent(new ClickEvent(
-                        ClickEvent.Action.COPY_TO_CLIPBOARD, capeId)));
-        mc.gui.getChat().addMessage(msg);
-
-        msg = PREFIX.copy();
-        msg.append(localized("message", "contact")).withStyle(msg.getStyle()
-                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                        localized("message", "contact.tooltip")))
-                .withClickEvent(new ClickEvent(
-                        ClickEvent.Action.OPEN_URL, "https://terminalmc.dev")));
-        mc.gui.getChat().addMessage(msg);
+        return false;
     }
 }
