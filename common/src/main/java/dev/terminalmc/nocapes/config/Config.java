@@ -22,9 +22,8 @@ import dev.terminalmc.nocapes.NoCapes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -34,6 +33,7 @@ import java.util.Map;
 public class Config {
     private static final Path DIR_PATH = Path.of("config");
     private static final String FILE_NAME = NoCapes.MOD_ID + ".json";
+    private static final String BACKUP_FILE_NAME = NoCapes.MOD_ID + ".unreadable.json";
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     // Options
@@ -96,21 +96,36 @@ public class Config {
         Config config = null;
         if (Files.exists(file)) {
             config = load(file, GSON);
+            if (config == null) {
+                backup();
+                NoCapes.LOG.warn("Resetting config");
+            }
         }
-        if (config == null) {
-            config = new Config();
-        }
-        return config;
+        return config != null ? config : new Config();
     }
 
     private static @Nullable Config load(Path file, Gson gson) {
-        try (FileReader reader = new FileReader(file.toFile())) {
+        try (InputStreamReader reader = new InputStreamReader(
+                new FileInputStream(file.toFile()), StandardCharsets.UTF_8)) {
             return gson.fromJson(reader, Config.class);
         } catch (Exception e) {
             // Catch Exception as errors in deserialization may not fall under
             // IOException or JsonParseException, but should not crash the game.
-            NoCapes.LOG.error("Unable to load config.", e);
+            NoCapes.LOG.error("Unable to load config", e);
             return null;
+        }
+    }
+
+    private static void backup() {
+        try {
+            NoCapes.LOG.warn("Copying {} to {}", FILE_NAME, BACKUP_FILE_NAME);
+            if (!Files.isDirectory(DIR_PATH)) Files.createDirectories(DIR_PATH);
+            Path file = DIR_PATH.resolve(FILE_NAME);
+            Path backupFile = file.resolveSibling(BACKUP_FILE_NAME);
+            Files.move(file, backupFile, StandardCopyOption.ATOMIC_MOVE,
+                    StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            NoCapes.LOG.error("Unable to copy config file", e);
         }
     }
 
@@ -121,8 +136,8 @@ public class Config {
             if (!Files.isDirectory(DIR_PATH)) Files.createDirectories(DIR_PATH);
             Path file = DIR_PATH.resolve(FILE_NAME);
             Path tempFile = file.resolveSibling(file.getFileName() + ".tmp");
-
-            try (FileWriter writer = new FileWriter(tempFile.toFile())) {
+            try (OutputStreamWriter writer = new OutputStreamWriter(
+                    new FileOutputStream(tempFile.toFile()), StandardCharsets.UTF_8)) {
                 writer.write(GSON.toJson(instance));
             } catch (IOException e) {
                 throw new IOException(e);
@@ -131,7 +146,7 @@ public class Config {
                     StandardCopyOption.REPLACE_EXISTING);
             NoCapes.onConfigSaved(instance);
         } catch (IOException e) {
-            NoCapes.LOG.error("Unable to save config.", e);
+            NoCapes.LOG.error("Unable to save config", e);
         }
     }
 }
