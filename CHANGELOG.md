@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- Removed debug logging
+
 ## 1.0.1
 
 - Added Mojang Office cape

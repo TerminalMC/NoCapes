@@ -40,14 +40,12 @@ public class MixinSkinManager {
     private CompletableFuture<ResourceLocation> wrapPlayerSkinInit(
             SkinManager.TextureCache instance, MinecraftProfileTexture texture, 
             Operation<CompletableFuture<ResourceLocation>> original) {
-        NoCapes.LOG.info("processing '{}'", texture.getUrl());
         return original.call(instance, texture).thenApply((location) -> {
             String hash = texture.getHash();
             if (
                     !NoCapes.CAPE_CACHE.containsKey(location) 
                     && Arrays.asList(NoCapes.CAPES).contains(hash)
             ) {
-                NoCapes.LOG.warn("caching cape location '{}' with hash '{}'", location, hash);
                 NoCapes.CAPE_CACHE.put(location, hash);
             }
             return location;
