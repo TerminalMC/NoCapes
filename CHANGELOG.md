@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3
+
+- Added Minecraft Experience cape
+
 ## 1.0.1
 
 - Added Mojang Office cape

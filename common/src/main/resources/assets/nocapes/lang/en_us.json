@@ -1,9 +1,6 @@
 {
   "nocapes.name": "NoCapes",
 
-  "modmenu.descriptionTranslation.nocapes": "${mod_description}",
-  "fml.menu.mods.info.description.nocapes": "${mod_description}",
-
   "message.nocapes.viewModrinth": "View on Modrinth",
   "message.nocapes.installCloth": "Install Cloth Config API to access mod options",
 
