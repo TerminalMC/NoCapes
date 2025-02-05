@@ -36,6 +36,14 @@ public class NoCapes {
             .append(Component.literal(MOD_NAME).withStyle(ChatFormatting.GOLD))
             .append(Component.literal("] ").withStyle(ChatFormatting.DARK_GRAY))
             .withStyle(ChatFormatting.WHITE);
+    /*
+    Given the cape texture file, the SHA256 hash can be found and verified 
+    using a simple python script:
+    
+    import hashlib
+    with open(<texture_file_path>, 'rb') as file:
+        print(f"https://textures.minecraft.net/texture/{hashlib.sha256(file.read()).hexdigest()}")
+     */
     public static final String[] CAPES = {
             "all",
             "2340c0e03dd24a11b15a8b33c2a7e9e32abb2051b2481d0ba7defd635ca7a933",
