@@ -16,37 +16,30 @@
 
 package dev.terminalmc.nocapes.mixin;
 
-import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.terminalmc.nocapes.NoCapes;
-import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.CapeLayer;
-import net.minecraft.world.entity.player.PlayerModelPart;
+import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
 
 import static dev.terminalmc.nocapes.config.Config.options;
 
 @Mixin(CapeLayer.class)
-public class MixinCapeLayer {
-    @WrapMethod(
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V"
+public abstract class MixinCapeLayer {
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/resources/PlayerSkin;capeTexture()Lnet/minecraft/resources/ResourceLocation;"
+            )
     )
-    private void wrapRender(PoseStack poseStack, MultiBufferSource buffer, int packedLight, 
-                            AbstractClientPlayer player, float limbSwing, float limbSwingAmount, 
-                            float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, 
-                            Operation<Void> original) {
-        if (
-                !player.isInvisible() 
-                && player.isModelPartShown(PlayerModelPart.CAPE) 
-                && (
-                        !options().hideCape 
-                        || !NoCapes.blockCape(player.getGameProfile())
-                )
-        ) {
-            original.call(poseStack, buffer, packedLight, player, limbSwing, limbSwingAmount, 
-                    partialTicks, ageInTicks, netHeadYaw, headPitch);
-        }
+    private static @Nullable ResourceLocation wrapCapeTexture(PlayerSkin instance, Operation<ResourceLocation> original) {
+        ResourceLocation texture = original.call(instance);
+        if (options().hideCape && NoCapes.blockCape(texture)) return null;
+        return texture;
     }
 }
