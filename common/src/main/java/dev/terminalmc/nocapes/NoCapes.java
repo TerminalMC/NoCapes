@@ -38,7 +38,7 @@ public class NoCapes {
             .withStyle(ChatFormatting.WHITE);
     /*
     Given the cape texture file, the SHA256 hash can be found and verified 
-    using a simple python script:
+    using a simple Python script:
     
     import hashlib
     with open(<texture_file_path>, 'rb') as file:
@@ -52,6 +52,8 @@ public class NoCapes {
             "afd553b39358a24edfe3b8a9a939fa5fa4faa4d9a9c3d6af8eafb377fa05c2bb",
             "cb40a92e32b57fd732a00fc325e7afb00a7ca74936ad50d8e860152e482cfbde",
             "569b7f2a1d00d26f30efe3f9ab9ac817b1e6d35f4f3cfb0324ef2d328223d350",
+            "4b5de481e1b41f51c678155ff965c7e9526c7c641aaaf97a501916c7cb101c4b",
+            "b1fc59bc3de3cda3ed4d99c3d65b721c57cec900ece350cbda6f451099e078e7",
             "5c29410057e32abec02d870ecb52ec25fb45ea81e785a7854ae8429d7236ca26",
             "56c35628fe1c4d59dd52561a3d03bfa4e1a76d397c8b9c476c2f77cb6aebb1df",
             "7658c5025c77cfac7574aab3af94a46a8886e3b7722a895255fbf22ab8652434",
