@@ -4,13 +4,15 @@
   "message.nocapes.viewModrinth": "View on Modrinth",
   "message.nocapes.installCloth": "Install Cloth Config API to access mod options",
 
-  "option.nocapes.show": "Show",
-  "option.nocapes.hide": "Hide",
+  "option.nocapes.hideEverything": "Hide Everything",
+  "option.nocapes.hideEverything.tooltip": "Overrides the individual controls below",
+  "option.nocapes.individualCapes": "Individual Cape Controls",
 
-  "option.nocapes.hideCape": "Hide Cape",
-  "option.nocapes.hideElytra": "Hide Elytra",
+  "option.nocapes.showMode.BOTH": "Show",
+  "option.nocapes.showMode.CAPE": "Show Cape Only",
+  "option.nocapes.showMode.ELYTRA": "Show Elytra Only",
+  "option.nocapes.showMode.NEITHER": "Hide",
 
-  "cape.nocapes.all": "All Capes",
   "cape.nocapes.2340c0e03dd24a11b15a8b33c2a7e9e32abb2051b2481d0ba7defd635ca7a933": "Migrator",
   "cape.nocapes.cd9d82ab17fd92022dbd4a86cde4c382a7540e117fae7b9a2853658505a80625": "15th Anniversary",
   "cape.nocapes.f9a76537647989f9a0b6d001e320dac591c359e9e61a31f4ce11c88f207f0ad4": "Vanilla",

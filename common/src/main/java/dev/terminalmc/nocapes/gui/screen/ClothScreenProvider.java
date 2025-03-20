@@ -18,7 +18,7 @@ package dev.terminalmc.nocapes.gui.screen;
 
 import dev.terminalmc.nocapes.config.Config;
 import me.shedaniel.clothconfig2.api.*;
-import net.minecraft.ChatFormatting;
+import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.minecraft.client.gui.screens.Screen;
 
 import static dev.terminalmc.nocapes.util.Localization.localized;
@@ -42,27 +42,30 @@ public class ClothScreenProvider {
 
         ConfigCategory modSettings = builder.getOrCreateCategory(localized("option", "category.cape_render"));
 
-        modSettings.addEntry(eb.startBooleanToggle(
-                        localized("option", "hideCape"), options.hideCape)
-                .setDefaultValue(Config.Options.hideCapeDefault)
-                .setSaveConsumer(val -> options.hideCape = val)
+        modSettings.addEntry(eb.startBooleanToggle(localized("option", "hideEverything"),
+                        options.hideEverything)
+                .setTooltip(localized("option", "hideEverything.tooltip"))
+                .setDefaultValue(Config.Options.hideEverythingDefault)
+                .setSaveConsumer(val -> options.hideEverything = val)
                 .build());
 
-        modSettings.addEntry(eb.startBooleanToggle(
-                        localized("option", "hideElytra"), options.hideElytra)
-                .setDefaultValue(Config.Options.hideElytraDefault)
-                .setSaveConsumer(val -> options.hideElytra = val)
-                .build());
+        SubCategoryBuilder capeGroup = eb.startSubCategory(localized("option", "individualCapes"))
+                .setExpanded(!options.hideEverything);
 
         for (String url : options.capes.keySet()) {
-            modSettings.addEntry(eb.startBooleanToggle(
-                    localized("cape", url), options.capes.get(url))
-                    .setYesNoTextSupplier((val) -> localized("option", val ? "show" : "hide")
-                            .withStyle(val ? ChatFormatting.GREEN : ChatFormatting.RED))
-                    .setDefaultValue(false)
-                    .setSaveConsumer(val -> options.capes.put(url, val))
+            Config.ShowMode mode = options.capes.get(url);
+            capeGroup.add(eb.startIntSlider(localized("cape", url),
+                            mode.index, 0, Config.ShowMode.values().length - 1)
+                    .setTextGetter((val) -> {
+                        Config.ShowMode m = Config.ShowMode.values()[val];
+                        return localized("option", "showMode." + m).withStyle(m.format);
+                    })
+                    .setDefaultValue(0)
+                    .setSaveConsumer(val -> options.capes.put(url, Config.ShowMode.values()[val]))
                     .build());
         }
+
+        modSettings.addEntry(capeGroup.build());
 
         return builder.build();
     }

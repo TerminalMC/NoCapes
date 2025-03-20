@@ -27,6 +27,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+import static dev.terminalmc.nocapes.config.Config.options;
+
 public class NoCapes {
     public static final String MOD_ID = "nocapes";
     public static final String MOD_NAME = "NoCapes";
@@ -45,7 +47,6 @@ public class NoCapes {
         print(f"https://textures.minecraft.net/texture/{hashlib.sha256(file.read()).hexdigest()}")
      */
     public static final String[] CAPES = {
-            "all",
             "2340c0e03dd24a11b15a8b33c2a7e9e32abb2051b2481d0ba7defd635ca7a933",
             "cd9d82ab17fd92022dbd4a86cde4c382a7540e117fae7b9a2853658505a80625",
             "f9a76537647989f9a0b6d001e320dac591c359e9e61a31f4ce11c88f207f0ad4",
@@ -79,46 +80,51 @@ public class NoCapes {
             "2e002d5e1758e79ba51d08d92a0f3a95119f2f435ae7704916507b6c565a7da8",
             "ca29f5dd9e94fb1748203b92e36b66fda80750c87ebc18d6eafdb0e28cc1d05f",
     };
-    private static final Map<UUID, String> CAPE_CACHE = new HashMap<>();
-    private static boolean blockAll = false;
+    public static final Map<UUID, String> CAPE_CACHE = new HashMap<>();
 
     public static void init() {
         Config config = Config.getAndSave();
         for (String id : CAPES) {
             if (!config.options.capes.containsKey(id)) {
-                config.options.capes.put(id, true);
+                config.options.capes.put(id, Config.ShowMode.BOTH);
             }
         }
     }
 
     public static void onConfigSaved(Config config) {
-        blockAll = !config.options.capes.get("all");
+        // Cache update method
     }
 
-    private static @Nullable String getCapeId(GameProfile profile) {
+    private static @Nullable String getPlayerCapeId(GameProfile profile) {
         UUID uuid = profile.getId();
-        @Nullable String capeId = CAPE_CACHE.get(uuid);
-
-        if (capeId == null) {
-            MinecraftProfileTexture capeTexture = Minecraft.getInstance()
+        if (CAPE_CACHE.containsKey(uuid)) {
+            return CAPE_CACHE.get(uuid);
+        } else {
+            MinecraftProfileTexture texture = Minecraft.getInstance()
                     .getMinecraftSessionService().getTextures(profile).cape();
-            if (capeTexture != null) capeId = capeTexture.getUrl();
-            if (capeId == null || !capeId.contains("textures.minecraft.net/texture/")) return null;
-            capeId = capeId.split("/texture/")[1];
-            CAPE_CACHE.put(uuid, capeId);
+            // Texture is null is when checking the local player's GameProfile
+            // on Hypixel, for some reason. Not sure about other cases.
+            if (texture != null) {
+                String url = texture.getUrl();
+                if (url != null && url.contains("textures.minecraft.net/texture/")) {
+                    String capeId = url.split("/texture/")[1];
+                    CAPE_CACHE.put(uuid, capeId);
+                    return capeId;
+                }
+            }
         }
-
-        return capeId;
+        return null;
     }
 
     public static boolean blockCape(GameProfile profile) {
-        if (blockAll) return true;
+        if (options().hideEverything) return true;
+        @Nullable Config.ShowMode mode = Config.get().options.capes.get(getPlayerCapeId(profile));
+        return mode != null && !mode.showCape();
+    }
 
-        String capeId = getCapeId(profile);
-        if (capeId != null) {
-            @Nullable Boolean render = Config.get().options.capes.get(capeId);
-            return render != null && !render;
-        }
-        return false;
+    public static boolean blockElytra(GameProfile profile) {
+        if (options().hideEverything) return true;
+        @Nullable Config.ShowMode mode = Config.get().options.capes.get(getPlayerCapeId(profile));
+        return mode != null && !mode.showElytra();
     }
 }

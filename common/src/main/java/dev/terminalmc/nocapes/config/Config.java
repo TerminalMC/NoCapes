@@ -19,6 +19,8 @@ package dev.terminalmc.nocapes.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.terminalmc.nocapes.NoCapes;
+import dev.terminalmc.nocapes.platform.Services;
+import net.minecraft.ChatFormatting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,7 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Config {
-    private static final Path DIR_PATH = Path.of("config");
+    private static final Path CONFIG_DIR = Services.PLATFORM.getConfigDir();
     private static final String FILE_NAME = NoCapes.MOD_ID + ".json";
     private static final String BACKUP_FILE_NAME = NoCapes.MOD_ID + ".unreadable.json";
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -45,18 +47,38 @@ public class Config {
     }
 
     public static class Options {
-        public static final boolean hideCapeDefault = true;
-        public boolean hideCape = hideCapeDefault;
+        public static final boolean hideEverythingDefault = true;
+        public boolean hideEverything = hideEverythingDefault;
         
-        public static final boolean hideElytraDefault = true;
-        public boolean hideElytra = hideElytraDefault;
-        
-        public Map<String, Boolean> capes = defaultCapes();
+        public Map<String, ShowMode> capes = defaultCapes();
     }
 
-    public static Map<String, Boolean> defaultCapes() {
-        Map<String, Boolean> capes = new LinkedHashMap<>();
-        for (String id : NoCapes.CAPES) capes.put(id, !id.equals("all"));
+    public enum ShowMode {
+        BOTH(0, ChatFormatting.GREEN),
+        CAPE(1, ChatFormatting.YELLOW),
+        ELYTRA(2, ChatFormatting.GOLD),
+        NEITHER(3, ChatFormatting.RED);
+
+        public final int index;
+        public final ChatFormatting format;
+
+        ShowMode(int index, ChatFormatting format) {
+            this.index = index;
+            this.format = format;
+        }
+
+        public boolean showCape() {
+            return index == 0 || index == 1;
+        }
+
+        public boolean showElytra() {
+            return index == 0 || index == 2;
+        }
+    }
+
+    public static Map<String, ShowMode> defaultCapes() {
+        Map<String, ShowMode> capes = new LinkedHashMap<>();
+        for (String id : NoCapes.CAPES) capes.put(id, ShowMode.BOTH);
         return capes;
     }
     
@@ -83,16 +105,16 @@ public class Config {
         return instance;
     }
 
-    // Cleanup
+    // Validation
 
-    private void cleanup() {
+    private void validate() {
         // Called before config is saved
     }
 
     // Load and save
 
     public static @NotNull Config load() {
-        Path file = DIR_PATH.resolve(FILE_NAME);
+        Path file = CONFIG_DIR.resolve(FILE_NAME);
         Config config = null;
         if (Files.exists(file)) {
             config = load(file, GSON);
@@ -119,8 +141,8 @@ public class Config {
     private static void backup() {
         try {
             NoCapes.LOG.warn("Copying {} to {}", FILE_NAME, BACKUP_FILE_NAME);
-            if (!Files.isDirectory(DIR_PATH)) Files.createDirectories(DIR_PATH);
-            Path file = DIR_PATH.resolve(FILE_NAME);
+            if (!Files.isDirectory(CONFIG_DIR)) Files.createDirectories(CONFIG_DIR);
+            Path file = CONFIG_DIR.resolve(FILE_NAME);
             Path backupFile = file.resolveSibling(BACKUP_FILE_NAME);
             Files.move(file, backupFile, StandardCopyOption.ATOMIC_MOVE,
                     StandardCopyOption.REPLACE_EXISTING);
@@ -131,10 +153,10 @@ public class Config {
 
     public static void save() {
         if (instance == null) return;
-        instance.cleanup();
+        instance.validate();
         try {
-            if (!Files.isDirectory(DIR_PATH)) Files.createDirectories(DIR_PATH);
-            Path file = DIR_PATH.resolve(FILE_NAME);
+            if (!Files.isDirectory(CONFIG_DIR)) Files.createDirectories(CONFIG_DIR);
+            Path file = CONFIG_DIR.resolve(FILE_NAME);
             Path tempFile = file.resolveSibling(file.getFileName() + ".tmp");
             try (OutputStreamWriter writer = new OutputStreamWriter(
                     new FileOutputStream(tempFile.toFile()), StandardCharsets.UTF_8)) {
