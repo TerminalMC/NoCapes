@@ -19,17 +19,17 @@ package dev.terminalmc.nocapes.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.terminalmc.nocapes.NoCapes;
-import net.minecraft.client.renderer.entity.layers.CapeLayer;
+import net.minecraft.client.renderer.entity.layers.WingsLayer;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(CapeLayer.class)
-public abstract class MixinCapeLayer {
+@Mixin(WingsLayer.class)
+public class MixinWingsLayer {
     @WrapOperation(
-            method = "render",
+            method = "getPlayerElytraTexture",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/resources/PlayerSkin;capeTexture()Lnet/minecraft/resources/ResourceLocation;"
@@ -37,7 +37,7 @@ public abstract class MixinCapeLayer {
     )
     private static @Nullable ResourceLocation wrapCapeTexture(PlayerSkin instance, Operation<ResourceLocation> original) {
         ResourceLocation texture = original.call(instance);
-        if (NoCapes.blockCape(texture)) return null;
+        if (NoCapes.blockElytra(texture)) return null;
         return texture;
     }
 }

@@ -16,13 +16,11 @@
 
 package dev.terminalmc.nocapes;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import dev.terminalmc.nocapes.config.Config;
 import dev.terminalmc.nocapes.util.ModLogger;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -80,7 +78,7 @@ public class NoCapes {
             "2e002d5e1758e79ba51d08d92a0f3a95119f2f435ae7704916507b6c565a7da8",
             "ca29f5dd9e94fb1748203b92e36b66fda80750c87ebc18d6eafdb0e28cc1d05f",
     };
-    public static final Map<UUID, @Nullable String> CAPE_CACHE = new HashMap<>();
+    public static final Map<ResourceLocation, String> CAPE_CACHE = new HashMap<>();
 
     public static void init() {
         Config config = Config.getAndSave();
@@ -95,36 +93,21 @@ public class NoCapes {
         // Cache update method
     }
 
-    private static @Nullable String getPlayerCapeId(GameProfile profile) {
-        UUID uuid = profile.getId();
-        if (CAPE_CACHE.containsKey(uuid)) {
-            return CAPE_CACHE.get(uuid);
-        } else {
-            MinecraftProfileTexture texture = Minecraft.getInstance()
-                    .getMinecraftSessionService().getTextures(profile).cape();
-            // Texture is null is when checking the local player's GameProfile
-            // on Hypixel, for some reason. Not sure about other cases.
-            @Nullable String capeId = null;
-            if (texture != null) {
-                String url = texture.getUrl();
-                if (url != null && url.contains("textures.minecraft.net/texture/")) {
-                    capeId = url.split("/texture/")[1];
-                }
-            }
-            CAPE_CACHE.put(uuid, capeId);
-            return capeId;
+    public static boolean blockCape(ResourceLocation location) {
+        if (options().hideEverything) return true;
+        if (CAPE_CACHE.containsKey(location)) {
+            @Nullable Config.ShowMode mode = Config.get().options.capes.get(CAPE_CACHE.get(location));
+            return mode != null && !mode.showCape();
         }
+        return false;
     }
 
-    public static boolean blockCape(GameProfile profile) {
+    public static boolean blockElytra(ResourceLocation location) {
         if (options().hideEverything) return true;
-        @Nullable Config.ShowMode mode = Config.get().options.capes.get(getPlayerCapeId(profile));
-        return mode != null && !mode.showCape();
-    }
-
-    public static boolean blockElytra(GameProfile profile) {
-        if (options().hideEverything) return true;
-        @Nullable Config.ShowMode mode = Config.get().options.capes.get(getPlayerCapeId(profile));
-        return mode != null && !mode.showElytra();
+        if (CAPE_CACHE.containsKey(location)) {
+            @Nullable Config.ShowMode mode = Config.get().options.capes.get(CAPE_CACHE.get(location));
+            return mode != null && !mode.showElytra();
+        }
+        return false;
     }
 }

@@ -18,31 +18,35 @@ package dev.terminalmc.nocapes.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import dev.terminalmc.nocapes.NoCapes;
-import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.entity.layers.ElytraLayer;
-import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.client.resources.SkinManager;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(ElytraLayer.class)
-public class MixinElytraLayer {
+import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
+
+@Mixin(SkinManager.class)
+public class MixinSkinManager {
     @WrapOperation(
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
+            method = "registerTextures",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/resources/PlayerSkin;capeTexture()Lnet/minecraft/resources/ResourceLocation;"
+                    target = "Lnet/minecraft/client/resources/SkinManager$TextureCache;getOrLoad(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)Ljava/util/concurrent/CompletableFuture;"
             )
     )
-    private @Nullable ResourceLocation nullIfBlocked(PlayerSkin instance,
-                                                     Operation<ResourceLocation> original,
-                                                     @Local AbstractClientPlayer player) {
-        if (instance.capeTexture() != null && !NoCapes.blockElytra(player.getGameProfile())) {
-            return original.call(instance);
-        }
-        return null;
+    private CompletableFuture<ResourceLocation> wrapPlayerSkinInit(
+            SkinManager.TextureCache instance, MinecraftProfileTexture texture, 
+            Operation<CompletableFuture<ResourceLocation>> original) {
+        return original.call(instance, texture).thenApply((location) -> {
+            String hash = texture.getHash();
+            if (!NoCapes.CAPE_CACHE.containsKey(location)
+                    && Arrays.asList(NoCapes.CAPES).contains(hash)) {
+                NoCapes.CAPE_CACHE.put(location, hash);
+            }
+            return location;
+        });
     }
 }
