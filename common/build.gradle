@@ -4,9 +4,10 @@ plugins {
 }
 
 dependencies {
+    // Mixin and MixinExtras
     compileOnly("org.spongepowered:mixin:${mixin_version}")
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${mixinextras_version}"))
-    
+
     // Cloth Config API
     api("me.shedaniel.cloth:cloth-config-neoforge:${clothconfig_version}")
 }
@@ -14,7 +15,6 @@ dependencies {
 neoForge {
     version = neoforge_version // Shut up
     neoFormVersion = neoform_version
-    // Automatically enable AccessTransformers if the file exists
     def at = file("src/main/resources/META-INF/accesstransformer.cfg")
     if (at.exists()) accessTransformers.from(at.absolutePath)
     parchment {
