@@ -80,7 +80,7 @@ public class NoCapes {
             "2e002d5e1758e79ba51d08d92a0f3a95119f2f435ae7704916507b6c565a7da8",
             "ca29f5dd9e94fb1748203b92e36b66fda80750c87ebc18d6eafdb0e28cc1d05f",
     };
-    public static final Map<UUID, String> CAPE_CACHE = new HashMap<>();
+    public static final Map<UUID, @Nullable String> CAPE_CACHE = new HashMap<>();
 
     public static void init() {
         Config config = Config.getAndSave();
@@ -104,16 +104,16 @@ public class NoCapes {
                     .getMinecraftSessionService().getTextures(profile).cape();
             // Texture is null is when checking the local player's GameProfile
             // on Hypixel, for some reason. Not sure about other cases.
+            @Nullable String capeId = null;
             if (texture != null) {
                 String url = texture.getUrl();
                 if (url != null && url.contains("textures.minecraft.net/texture/")) {
-                    String capeId = url.split("/texture/")[1];
-                    CAPE_CACHE.put(uuid, capeId);
-                    return capeId;
+                    capeId = url.split("/texture/")[1];
                 }
             }
+            CAPE_CACHE.put(uuid, capeId);
+            return capeId;
         }
-        return null;
     }
 
     public static boolean blockCape(GameProfile profile) {
