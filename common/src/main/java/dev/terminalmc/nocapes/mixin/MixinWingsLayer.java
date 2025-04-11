@@ -18,31 +18,26 @@ package dev.terminalmc.nocapes.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
 import dev.terminalmc.nocapes.NoCapes;
-import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.entity.layers.ElytraLayer;
+import net.minecraft.client.renderer.entity.layers.WingsLayer;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(ElytraLayer.class)
-public class MixinElytraLayer {
+@Mixin(WingsLayer.class)
+public class MixinWingsLayer {
     @WrapOperation(
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
+            method = "getPlayerElytraTexture",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/resources/PlayerSkin;capeTexture()Lnet/minecraft/resources/ResourceLocation;"
             )
     )
-    private @Nullable ResourceLocation nullIfBlocked(PlayerSkin instance,
-                                                     Operation<ResourceLocation> original,
-                                                     @Local AbstractClientPlayer player) {
-        if (instance.capeTexture() != null && !NoCapes.blockElytra(player.getGameProfile())) {
-            return original.call(instance);
-        }
-        return null;
+    private static @Nullable ResourceLocation wrapCapeTexture(PlayerSkin instance, Operation<ResourceLocation> original) {
+        ResourceLocation texture = original.call(instance);
+        if (NoCapes.blockElytra(texture)) return null;
+        return texture;
     }
 }

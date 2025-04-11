@@ -16,8 +16,6 @@
 
 package dev.terminalmc.nocapes;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import dev.terminalmc.nocapes.config.Config;
 import dev.terminalmc.nocapes.util.Capes;
 import dev.terminalmc.nocapes.util.ModLogger;
@@ -26,6 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -43,7 +42,7 @@ public class NoCapes {
             .append(Component.literal("] ").withStyle(ChatFormatting.DARK_GRAY))
             .withStyle(ChatFormatting.GRAY);
     
-    public static final Map<UUID, @Nullable String> UUID_CAPE_CACHE = new HashMap<>();
+    public static final Map<ResourceLocation, String> RESOURCE_CAPE_CACHE = new HashMap<>();
 
     public static void init() {
         Config config = Config.getAndSave();
@@ -64,43 +63,25 @@ public class NoCapes {
     public static void onConfigSaved(Config config) {
         // Cache update method
     }
-
-    private static @Nullable String getPlayerCapeId(GameProfile profile) {
-        Minecraft mc = Minecraft.getInstance();
-        UUID uuid = profile.getId();
-        if (UUID_CAPE_CACHE.containsKey(uuid)) {
-            return UUID_CAPE_CACHE.get(uuid);
-        } else {
-            MinecraftProfileTexture texture =
-                    mc.getMinecraftSessionService().getTextures(profile).cape();
-            // Texture is null is when checking the local player's GameProfile
-            // on Hypixel, for some reason.
-            // No luck finding a workaround, but don't consider it a significant
-            // issue since users probably won't wear capes they don't like.
-            @Nullable String capeId = null;
-            if (texture != null) {
-                String url = texture.getUrl();
-                if (url != null && url.contains("textures.minecraft.net/texture/")) {
-                    capeId = url.split("/texture/")[1];
-                    // Cache the ID and add to config if it isn't already there
-                    UUID_CAPE_CACHE.put(uuid, capeId);
-                    checkInConfig(capeId, url);
-                }
-            }
-            return capeId;
+    
+    public static boolean blockCape(ResourceLocation location) {
+        if (options().hideEverything) return true;
+        if (RESOURCE_CAPE_CACHE.containsKey(location)) {
+            @Nullable Config.ShowMode mode = Config.get().options.capes.get(
+                    RESOURCE_CAPE_CACHE.get(location));
+            return mode != null && !mode.showCape();
         }
+        return false;
     }
 
-    public static boolean blockCape(GameProfile profile) {
+    public static boolean blockElytra(ResourceLocation location) {
         if (options().hideEverything) return true;
-        @Nullable Config.ShowMode mode = Config.get().options.capes.get(getPlayerCapeId(profile));
-        return mode != null && !mode.showCape();
-    }
-
-    public static boolean blockElytra(GameProfile profile) {
-        if (options().hideEverything) return true;
-        @Nullable Config.ShowMode mode = Config.get().options.capes.get(getPlayerCapeId(profile));
-        return mode != null && !mode.showElytra();
+        if (RESOURCE_CAPE_CACHE.containsKey(location)) {
+            @Nullable Config.ShowMode mode = Config.get().options.capes.get(
+                    RESOURCE_CAPE_CACHE.get(location));
+            return mode != null && !mode.showElytra();
+        }
+        return false;
     }
     
     public static void checkInConfig(String capeId, String url) {
