@@ -31,6 +31,6 @@ public class MixinClientPacketListener {
             at = @At("HEAD")
     )
     private void onHandleLogin(ClientboundLoginPacket packet, CallbackInfo ci) {
-        NoCapes.CAPE_CACHE.clear();
+        NoCapes.UUID_CAPE_CACHE.clear();
     }
 }

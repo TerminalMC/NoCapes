@@ -3,6 +3,8 @@
 
   "message.nocapes.viewModrinth": "View on Modrinth",
   "message.nocapes.installCloth": "Install Cloth Config API to access mod options",
+  "message.nocapes.unknownCape": "Detected unrecognized cape ending in %s, and added it to config. Click here to copy the cape URL.",
+  "message.nocapes.clickToCopy": "Click to Copy",
 
   "option.nocapes.hideEverything": "Hide Everything",
   "option.nocapes.hideEverything.tooltip": "Overrides the individual controls below",
@@ -19,10 +21,11 @@
   "cape.nocapes.afd553b39358a24edfe3b8a9a939fa5fa4faa4d9a9c3d6af8eafb377fa05c2bb": "Cherry Blossom",
   "cape.nocapes.cb40a92e32b57fd732a00fc325e7afb00a7ca74936ad50d8e860152e482cfbde": "Purple Heart (Twitch)",
   "cape.nocapes.569b7f2a1d00d26f30efe3f9ab9ac817b1e6d35f4f3cfb0324ef2d328223d350": "Follower's (TikTok)",
-  "cape.nocapes.4b5de481e1b41f51c678155ff965c7e9526c7c641aaaf97a501916c7cb101c4b": "Home (Twitch)",
-  "cape.nocapes.b1fc59bc3de3cda3ed4d99c3d65b721c57cec900ece350cbda6f451099e078e7": "Menace (TikTok)",
   "cape.nocapes.5c29410057e32abec02d870ecb52ec25fb45ea81e785a7854ae8429d7236ca26": "Mojang Office",
+  "cape.nocapes.dbc21e222528e30dc88445314f7be6ff12d3aeebc3c192054fba7e3b3f8c77b1": "Menace (TikTok)",
+  "cape.nocapes.1de21419009db483900da6298a1e6cbf9f1bc1523a0dcdc16263fab150693edd": "Home (Twitch)",
   "cape.nocapes.56c35628fe1c4d59dd52561a3d03bfa4e1a76d397c8b9c476c2f77cb6aebb1df": "MCC 15th Year",
+  "cape.nocapes.308b32a9e303155a0b4262f9e5483ad4a22e3412e84fe8385a0bdd73dc41fa89": "Yearn",
   "cape.nocapes.7658c5025c77cfac7574aab3af94a46a8886e3b7722a895255fbf22ab8652434": "Minecraft Experience",
   "cape.nocapes.e7dfea16dc83c97df01a12fabbd1216359c0cd0ea42f9999b6e97c584963e980": "MineCon 2016",
   "cape.nocapes.b0cc08840700447322d953a02b965f1d65a13a603bf64b17c803c21446fe1635": "MineCon 2015",

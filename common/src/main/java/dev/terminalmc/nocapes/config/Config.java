@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.terminalmc.nocapes.NoCapes;
 import dev.terminalmc.nocapes.platform.Services;
+import dev.terminalmc.nocapes.util.Capes;
 import net.minecraft.ChatFormatting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,7 +51,7 @@ public class Config {
         public static final boolean hideEverythingDefault = true;
         public boolean hideEverything = hideEverythingDefault;
         
-        public Map<String, ShowMode> capes = defaultCapes();
+        public Map<String, @NotNull ShowMode> capes = defaultCapes();
     }
 
     public enum ShowMode {
@@ -78,7 +79,7 @@ public class Config {
 
     public static Map<String, ShowMode> defaultCapes() {
         Map<String, ShowMode> capes = new LinkedHashMap<>();
-        for (String id : NoCapes.CAPES) capes.put(id, ShowMode.BOTH);
+        for (String id : Capes.CAPES) capes.put(id, ShowMode.BOTH);
         return capes;
     }
     

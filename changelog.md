@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1
+
+- Added Yearn cape
+- Updated Home and Menace cape IDs
+- Re-added support for automatically handling new capes
+
 ## 1.1.0
 
 - Added Menace (TikTok) cape
