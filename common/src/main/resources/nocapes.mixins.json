@@ -9,7 +9,8 @@
   "client": [
     "MixinCapeLayer",
     "MixinClientPacketListener",
-    "MixinElytraLayer"
+    "MixinSkinManager",
+    "MixinWingsLayer"
   ],
   "server": [
   ],
