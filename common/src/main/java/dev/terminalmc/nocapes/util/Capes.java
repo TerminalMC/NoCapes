@@ -32,6 +32,7 @@ public class Capes {
      */
     public static final String[] CAPES = {
             "2340c0e03dd24a11b15a8b33c2a7e9e32abb2051b2481d0ba7defd635ca7a933", // Migrator
+            "5ec930cdd2629c8771655c60eebeb867b4b6559b0e6d3bc71c40c96347fa03f0", // Common
             "cd9d82ab17fd92022dbd4a86cde4c382a7540e117fae7b9a2853658505a80625", // 15th Anniversary
             "f9a76537647989f9a0b6d001e320dac591c359e9e61a31f4ce11c88f207f0ad4", // Vanilla
             "afd553b39358a24edfe3b8a9a939fa5fa4faa4d9a9c3d6af8eafb377fa05c2bb", // Cherry Blossom
@@ -64,5 +65,9 @@ public class Capes {
             "23ec737f18bfe4b547c95935fc297dd767bb84ee55bfd855144d279ac9bfd9fe", // Snowman
             "2e002d5e1758e79ba51d08d92a0f3a95119f2f435ae7704916507b6c565a7da8", // Spade
             "ca29f5dd9e94fb1748203b92e36b66fda80750c87ebc18d6eafdb0e28cc1d05f", // Translator (Japanese)
+            // Extra
+            "b1fc59bc3de3cda3ed4d99c3d65b721c57cec900ece350cbda6f451099e078e7", // Menace (old version)
+            "4b5de481e1b41f51c678155ff965c7e9526c7c641aaaf97a501916c7cb101c4b", // Home (old version)
+            "c3af7fb821254664558f28361158ca73303c9a85e96e5251102958d7ed60c4a3", // MineCon 2012 (no elytra)
     };
 }

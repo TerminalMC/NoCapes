@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.2
+
+- Added Common cape
+- Re-added old versions of Home and Menace capes
+- Added no-elytra version of MineCon 2012 cape
+
 ## 1.1.1
 
 - Added Yearn cape
