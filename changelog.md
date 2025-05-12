@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.3
+
+- Added Pan cape
+- Added Founder's cape
+
 ## 1.1.2
 
 - Added Common cape

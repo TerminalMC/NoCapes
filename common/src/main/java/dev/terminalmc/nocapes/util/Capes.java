@@ -27,12 +27,13 @@ public class Capes {
     Menace: "b1fc59bc3de3cda3ed4d99c3d65b721c57cec900ece350cbda6f451099e078e7"
     
     import hashlib
-    with open(<texture_file_path>, 'rb') as file:
+    with open("Valentine_Cape_(texture).png", 'rb') as file:
         print(f"https://textures.minecraft.net/texture/{hashlib.sha256(file.read()).hexdigest()}")
      */
     public static final String[] CAPES = {
             "2340c0e03dd24a11b15a8b33c2a7e9e32abb2051b2481d0ba7defd635ca7a933", // Migrator
             "5ec930cdd2629c8771655c60eebeb867b4b6559b0e6d3bc71c40c96347fa03f0", // Common
+            "28de4a81688ad18b49e735a273e086c18f1e3966956123ccb574034c06f5d336", // Pan
             "cd9d82ab17fd92022dbd4a86cde4c382a7540e117fae7b9a2853658505a80625", // 15th Anniversary
             "f9a76537647989f9a0b6d001e320dac591c359e9e61a31f4ce11c88f207f0ad4", // Vanilla
             "afd553b39358a24edfe3b8a9a939fa5fa4faa4d9a9c3d6af8eafb377fa05c2bb", // Cherry Blossom
@@ -41,8 +42,9 @@ public class Capes {
             "5c29410057e32abec02d870ecb52ec25fb45ea81e785a7854ae8429d7236ca26", // Mojang Office
             "dbc21e222528e30dc88445314f7be6ff12d3aeebc3c192054fba7e3b3f8c77b1", // Menace (TikTok)
             "1de21419009db483900da6298a1e6cbf9f1bc1523a0dcdc16263fab150693edd", // Home (Twitch)
-            "56c35628fe1c4d59dd52561a3d03bfa4e1a76d397c8b9c476c2f77cb6aebb1df", // MCC 15th Year
             "308b32a9e303155a0b4262f9e5483ad4a22e3412e84fe8385a0bdd73dc41fa89", // Yearn
+            "56c35628fe1c4d59dd52561a3d03bfa4e1a76d397c8b9c476c2f77cb6aebb1df", // MCC 15th Year
+            "99aba02ef05ec6aa4d42db8ee43796d6cd50e4b2954ab29f0caeb85f96bf52a1", // Founder's
             "7658c5025c77cfac7574aab3af94a46a8886e3b7722a895255fbf22ab8652434", // Minecraft Experience
             "e7dfea16dc83c97df01a12fabbd1216359c0cd0ea42f9999b6e97c584963e980", // MineCon 2016
             "b0cc08840700447322d953a02b965f1d65a13a603bf64b17c803c21446fe1635", // MineCon 2015
