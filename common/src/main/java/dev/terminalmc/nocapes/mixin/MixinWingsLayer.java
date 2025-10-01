@@ -20,9 +20,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.terminalmc.nocapes.NoCapes;
 import net.minecraft.client.renderer.entity.layers.WingsLayer;
-import net.minecraft.client.resources.PlayerSkin;
-import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.core.ClientAsset;
+import net.minecraft.world.entity.player.PlayerSkin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -32,12 +31,16 @@ public class MixinWingsLayer {
             method = "getPlayerElytraTexture",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/resources/PlayerSkin;capeTexture()Lnet/minecraft/resources/ResourceLocation;"
+                    target = "Lnet/minecraft/world/entity/player/PlayerSkin;cape()Lnet/minecraft/core/ClientAsset$Texture;"
             )
     )
-    private static @Nullable ResourceLocation wrapCapeTexture(PlayerSkin instance, Operation<ResourceLocation> original) {
-        ResourceLocation texture = original.call(instance);
-        if (NoCapes.blockElytra(texture)) return null;
+    private static ClientAsset.Texture wrapCapeTexture(
+            PlayerSkin instance,
+            Operation<ClientAsset.Texture> original
+    ) {
+        ClientAsset.Texture texture = original.call(instance);
+        if (texture != null && NoCapes.blockElytra(texture.texturePath()))
+            return null;
         return texture;
     }
 }

@@ -20,24 +20,27 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.terminalmc.nocapes.NoCapes;
 import net.minecraft.client.renderer.entity.layers.CapeLayer;
-import net.minecraft.client.resources.PlayerSkin;
-import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.core.ClientAsset;
+import net.minecraft.world.entity.player.PlayerSkin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(CapeLayer.class)
 public abstract class MixinCapeLayer {
     @WrapOperation(
-            method = "render",
+            method = "submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/AvatarRenderState;FF)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/resources/PlayerSkin;capeTexture()Lnet/minecraft/resources/ResourceLocation;"
+                    target = "Lnet/minecraft/world/entity/player/PlayerSkin;cape()Lnet/minecraft/core/ClientAsset$Texture;"
             )
     )
-    private static @Nullable ResourceLocation wrapCapeTexture(PlayerSkin instance, Operation<ResourceLocation> original) {
-        ResourceLocation texture = original.call(instance);
-        if (NoCapes.blockCape(texture)) return null;
+    private static ClientAsset.Texture wrapCape(
+            PlayerSkin instance,
+            Operation<ClientAsset.Texture> original
+    ) {
+        ClientAsset.Texture texture = original.call(instance);
+        if (texture != null && NoCapes.blockCape(texture.texturePath()))
+            return null;
         return texture;
     }
 }

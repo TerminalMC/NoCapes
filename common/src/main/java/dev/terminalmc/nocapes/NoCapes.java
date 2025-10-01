@@ -41,7 +41,7 @@ public class NoCapes {
             .append(Component.literal(MOD_NAME).withStyle(ChatFormatting.GOLD))
             .append(Component.literal("] ").withStyle(ChatFormatting.DARK_GRAY))
             .withStyle(ChatFormatting.GRAY);
-    
+
     public static final Map<ResourceLocation, String> RESOURCE_CAPE_CACHE = new HashMap<>();
 
     public static void init() {
@@ -63,7 +63,7 @@ public class NoCapes {
     public static void onConfigSaved(Config config) {
         // Cache update method
     }
-    
+
     public static boolean blockCape(ResourceLocation location) {
         if (options().hideEverything) return true;
         if (RESOURCE_CAPE_CACHE.containsKey(location)) {
@@ -83,17 +83,15 @@ public class NoCapes {
         }
         return false;
     }
-    
+
     public static void checkInConfig(String capeId, String url) {
         if (!options().capes.containsKey(capeId)) {
             Minecraft.getInstance().gui.getChat().addMessage(PREFIX.copy().append(
                     localized("message", "unknownCape", Component.literal(
                                     capeId.substring(Math.max(0, capeId.length() - 5)))
                             .withStyle(ChatFormatting.WHITE))).withStyle(PREFIX.getStyle()
-                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                            localized("message", "clickToCopy")))
-                    .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,
-                            url))));
+                    .withHoverEvent(new HoverEvent.ShowText(localized("message", "clickToCopy")))
+                    .withClickEvent(new ClickEvent.CopyToClipboard(url))));
             options().capes.put(capeId, Config.ShowMode.BOTH);
             Config.save();
         }

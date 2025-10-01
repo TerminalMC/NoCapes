@@ -21,7 +21,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import dev.terminalmc.nocapes.NoCapes;
 import net.minecraft.client.resources.SkinManager;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.ClientAsset;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,9 +38,9 @@ public class MixinSkinManager {
                     ordinal = 1
             )
     )
-    private CompletableFuture<ResourceLocation> wrapLoadCape(
-            SkinManager.TextureCache instance, MinecraftProfileTexture texture, 
-            Operation<CompletableFuture<ResourceLocation>> original) {
+    private CompletableFuture<ClientAsset.Texture> wrapLoadCape(
+            SkinManager.TextureCache instance, MinecraftProfileTexture texture,
+            Operation<CompletableFuture<ClientAsset.Texture>> original) {
         return noCapes$wrapLoadTexture(instance, texture, original);
     }
 
@@ -52,23 +52,23 @@ public class MixinSkinManager {
                     ordinal = 2
             )
     )
-    private CompletableFuture<ResourceLocation> wrapLoadElytra(
+    private CompletableFuture<ClientAsset.Texture> wrapLoadElytra(
             SkinManager.TextureCache instance, MinecraftProfileTexture texture,
-            Operation<CompletableFuture<ResourceLocation>> original) {
+            Operation<CompletableFuture<ClientAsset.Texture>> original) {
         return noCapes$wrapLoadTexture(instance, texture, original);
     }
-    
+
     @Unique
-    private CompletableFuture<ResourceLocation> noCapes$wrapLoadTexture(
+    private CompletableFuture<ClientAsset.Texture> noCapes$wrapLoadTexture(
             SkinManager.TextureCache instance, MinecraftProfileTexture texture,
-            Operation<CompletableFuture<ResourceLocation>> original) {
-        return original.call(instance, texture).thenApply((location) -> {
+            Operation<CompletableFuture<ClientAsset.Texture>> original) {
+        return original.call(instance, texture).thenApply((asset) -> {
             String hash = texture.getHash();
-            if (!NoCapes.RESOURCE_CAPE_CACHE.containsKey(location)) {
-                NoCapes.RESOURCE_CAPE_CACHE.put(location, hash);
+            if (!NoCapes.RESOURCE_CAPE_CACHE.containsKey(asset.texturePath())) {
+                NoCapes.RESOURCE_CAPE_CACHE.put(asset.texturePath(), hash);
                 NoCapes.checkInConfig(hash, "https://textures.minecraft.net/texture/" + hash);
             }
-            return location;
+            return asset;
         });
     }
 }
