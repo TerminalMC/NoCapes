@@ -22,12 +22,18 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
-@Mod(value = NoCapes.MOD_ID, dist = Dist.CLIENT)
+@Mod(
+        value = NoCapes.MOD_ID,
+        dist = Dist.CLIENT
+)
 public class NoCapesNeoForge {
+
     public NoCapesNeoForge() {
         // Config screen
-        ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class,
-                () -> (mc, parent) -> ConfigScreenProvider.getConfigScreen(parent));
+        ModLoadingContext.get().registerExtensionPoint(
+                IConfigScreenFactory.class,
+                () -> (mc, parent) -> ConfigScreenProvider.getConfigScreen(parent)
+        );
 
         // Main initialization
         NoCapes.init();

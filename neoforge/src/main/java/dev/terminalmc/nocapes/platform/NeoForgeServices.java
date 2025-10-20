@@ -17,20 +17,35 @@
 package dev.terminalmc.nocapes.platform;
 
 import dev.terminalmc.nocapes.platform.services.IPlatformServices;
-import dev.terminalmc.nocapes.NoCapes;
+import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLPaths;
 
-import java.util.ServiceLoader;
+import java.nio.file.Path;
 
-public class Services {
+public class NeoForgeServices implements IPlatformServices {
 
-    public static final IPlatformServices PLATFORM = load(IPlatformServices.class);
+    @Override
+    public boolean isDevEnv() {
+        return !FMLLoader.getCurrent().isProduction();
+    }
 
-    public static <T> T load(Class<T> clazz) {
-        final T loadedService = ServiceLoader.load(clazz)
-                .findFirst()
-                .orElseThrow(() -> new NullPointerException(
-                        "Failed to load service for " + clazz.getName()));
-        NoCapes.LOG.debug("Loaded {} for service {}", loadedService, clazz);
-        return loadedService;
+    @Override
+    public boolean isModLoaded(String modId) {
+        return FMLLoader.getCurrent().getLoadingModList().getModFileById(modId) != null;
+    }
+
+    @Override
+    public String getPlatformName() {
+        return "NeoForge";
+    }
+
+    @Override
+    public Path getGameDir() {
+        return FMLPaths.GAMEDIR.get();
+    }
+
+    @Override
+    public Path getConfigDir() {
+        return FMLPaths.CONFIGDIR.get();
     }
 }

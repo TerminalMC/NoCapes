@@ -27,12 +27,15 @@ import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static dev.terminalmc.nocapes.config.Config.options;
 import static dev.terminalmc.nocapes.util.Localization.localized;
 
 public class NoCapes {
+
     public static final String MOD_ID = "nocapes";
     public static final String MOD_NAME = "NoCapes";
     public static final ModLogger LOG = new ModLogger(MOD_NAME);
@@ -65,7 +68,8 @@ public class NoCapes {
     }
 
     public static boolean blockCape(ResourceLocation location) {
-        if (options().hideEverything) return true;
+        if (options().hideEverything)
+            return true;
         if (RESOURCE_CAPE_CACHE.containsKey(location)) {
             @Nullable Config.ShowMode mode = Config.get().options.capes.get(
                     RESOURCE_CAPE_CACHE.get(location));
@@ -75,7 +79,8 @@ public class NoCapes {
     }
 
     public static boolean blockElytra(ResourceLocation location) {
-        if (options().hideEverything) return true;
+        if (options().hideEverything)
+            return true;
         if (RESOURCE_CAPE_CACHE.containsKey(location)) {
             @Nullable Config.ShowMode mode = Config.get().options.capes.get(
                     RESOURCE_CAPE_CACHE.get(location));
@@ -87,9 +92,11 @@ public class NoCapes {
     public static void checkInConfig(String capeId, String url) {
         if (!options().capes.containsKey(capeId)) {
             Minecraft.getInstance().gui.getChat().addMessage(PREFIX.copy().append(
-                    localized("message", "unknownCape", Component.literal(
-                                    capeId.substring(Math.max(0, capeId.length() - 5)))
-                            .withStyle(ChatFormatting.WHITE))).withStyle(PREFIX.getStyle()
+                    localized(
+                            "message", "unknownCape", Component.literal(
+                                            capeId.substring(Math.max(0, capeId.length() - 5)))
+                                    .withStyle(ChatFormatting.WHITE)
+                    )).withStyle(PREFIX.getStyle()
                     .withHoverEvent(new HoverEvent.ShowText(localized("message", "clickToCopy")))
                     .withClickEvent(new ClickEvent.CopyToClipboard(url))));
             options().capes.put(capeId, Config.ShowMode.BOTH);

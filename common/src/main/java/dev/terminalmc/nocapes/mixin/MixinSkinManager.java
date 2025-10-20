@@ -30,6 +30,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Mixin(SkinManager.class)
 public class MixinSkinManager {
+
     @WrapOperation(
             method = "registerTextures",
             at = @At(
@@ -40,7 +41,8 @@ public class MixinSkinManager {
     )
     private CompletableFuture<ClientAsset.Texture> wrapLoadCape(
             SkinManager.TextureCache instance, MinecraftProfileTexture texture,
-            Operation<CompletableFuture<ClientAsset.Texture>> original) {
+            Operation<CompletableFuture<ClientAsset.Texture>> original
+    ) {
         return noCapes$wrapLoadTexture(instance, texture, original);
     }
 
@@ -54,14 +56,16 @@ public class MixinSkinManager {
     )
     private CompletableFuture<ClientAsset.Texture> wrapLoadElytra(
             SkinManager.TextureCache instance, MinecraftProfileTexture texture,
-            Operation<CompletableFuture<ClientAsset.Texture>> original) {
+            Operation<CompletableFuture<ClientAsset.Texture>> original
+    ) {
         return noCapes$wrapLoadTexture(instance, texture, original);
     }
 
     @Unique
     private CompletableFuture<ClientAsset.Texture> noCapes$wrapLoadTexture(
             SkinManager.TextureCache instance, MinecraftProfileTexture texture,
-            Operation<CompletableFuture<ClientAsset.Texture>> original) {
+            Operation<CompletableFuture<ClientAsset.Texture>> original
+    ) {
         return original.call(instance, texture).thenApply((asset) -> {
             String hash = texture.getHash();
             if (!NoCapes.RESOURCE_CAPE_CACHE.containsKey(asset.texturePath())) {

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package dev.terminalmc.nocapes.platform;
+package dev.terminalmc.nocapes.compat.modmenu;
 
-import dev.terminalmc.nocapes.platform.services.IPlatformInfo;
-import net.fabricmc.loader.api.FabricLoader;
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
+import dev.terminalmc.nocapes.gui.screen.ConfigScreenProvider;
 
-import java.nio.file.Path;
+public class ModMenuImpl implements ModMenuApi {
 
-public class FabricPlatformInfo implements IPlatformInfo {
     @Override
-    public Path getConfigDir() {
-        return FabricLoader.getInstance().getConfigDir();
+    public ConfigScreenFactory<?> getModConfigScreenFactory() {
+        return ConfigScreenProvider::getConfigScreen;
     }
 }

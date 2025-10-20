@@ -27,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(WingsLayer.class)
 public class MixinWingsLayer {
+
     @WrapOperation(
             method = "getPlayerElytraTexture",
             at = @At(

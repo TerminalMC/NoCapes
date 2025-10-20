@@ -27,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(CapeLayer.class)
 public abstract class MixinCapeLayer {
+
     @WrapOperation(
             method = "submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/AvatarRenderState;FF)V",
             at = @At(

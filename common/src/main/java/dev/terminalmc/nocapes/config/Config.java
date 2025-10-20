@@ -34,7 +34,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Config {
-    private static final Path CONFIG_DIR = Services.PLATFORM.getConfigDir();
+
+    private static final Path DIR_PATH = Services.PLATFORM.getConfigDir();
     private static final String FILE_NAME = NoCapes.MOD_ID + ".json";
     private static final String BACKUP_FILE_NAME = NoCapes.MOD_ID + ".unreadable.json";
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -48,9 +49,10 @@ public class Config {
     }
 
     public static class Options {
+
         public static final boolean hideEverythingDefault = true;
         public boolean hideEverything = hideEverythingDefault;
-        
+
         public Map<String, @NotNull ShowMode> capes = defaultCapes();
     }
 
@@ -79,10 +81,11 @@ public class Config {
 
     public static Map<String, ShowMode> defaultCapes() {
         Map<String, ShowMode> capes = new LinkedHashMap<>();
-        for (String id : Capes.CAPES) capes.put(id, ShowMode.BOTH);
+        for (String id : Capes.CAPES)
+            capes.put(id, ShowMode.BOTH);
         return capes;
     }
-    
+
     // Instance management
 
     private static Config instance = null;
@@ -94,12 +97,21 @@ public class Config {
         return instance;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static Config getAndSave() {
         get();
         save();
         return instance;
     }
 
+    @SuppressWarnings("unused")
+    public static Config reloadAndSave() {
+        instance = Config.load();
+        save();
+        return instance;
+    }
+
+    @SuppressWarnings("unused")
     public static Config resetAndSave() {
         instance = new Config();
         save();
@@ -108,15 +120,17 @@ public class Config {
 
     // Validation
 
+    /**
+     * Cleanup and validation method, called after config is loaded and before it is saved.
+     */
     private void validate() {
-        // Called before config is saved
     }
 
     // Load and save
 
     public static @NotNull Config load() {
-        Path file = CONFIG_DIR.resolve(FILE_NAME);
-        Config config = null;
+        Path file = DIR_PATH.resolve(FILE_NAME);
+        @Nullable Config config = null;
         if (Files.exists(file)) {
             config = load(file, GSON);
             if (config == null) {
@@ -124,12 +138,20 @@ public class Config {
                 NoCapes.LOG.warn("Resetting config");
             }
         }
-        return config != null ? config : new Config();
+        if (config == null)
+            config = new Config();
+        config.validate();
+        return config;
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static @Nullable Config load(Path file, Gson gson) {
-        try (InputStreamReader reader = new InputStreamReader(
-                new FileInputStream(file.toFile()), StandardCharsets.UTF_8)) {
+        try (
+                InputStreamReader reader = new InputStreamReader(
+                        new FileInputStream(file.toFile()),
+                        StandardCharsets.UTF_8
+                )
+        ) {
             return gson.fromJson(reader, Config.class);
         } catch (Exception e) {
             // Catch Exception as errors in deserialization may not fall under
@@ -142,31 +164,46 @@ public class Config {
     private static void backup() {
         try {
             NoCapes.LOG.warn("Copying {} to {}", FILE_NAME, BACKUP_FILE_NAME);
-            if (!Files.isDirectory(CONFIG_DIR)) Files.createDirectories(CONFIG_DIR);
-            Path file = CONFIG_DIR.resolve(FILE_NAME);
+            if (!Files.isDirectory(DIR_PATH))
+                Files.createDirectories(DIR_PATH);
+            Path file = DIR_PATH.resolve(FILE_NAME);
             Path backupFile = file.resolveSibling(BACKUP_FILE_NAME);
-            Files.move(file, backupFile, StandardCopyOption.ATOMIC_MOVE,
-                    StandardCopyOption.REPLACE_EXISTING);
+            Files.move(
+                    file,
+                    backupFile,
+                    StandardCopyOption.ATOMIC_MOVE,
+                    StandardCopyOption.REPLACE_EXISTING
+            );
         } catch (IOException e) {
             NoCapes.LOG.error("Unable to copy config file", e);
         }
     }
 
     public static void save() {
-        if (instance == null) return;
+        if (instance == null)
+            return;
         instance.validate();
         try {
-            if (!Files.isDirectory(CONFIG_DIR)) Files.createDirectories(CONFIG_DIR);
-            Path file = CONFIG_DIR.resolve(FILE_NAME);
+            if (!Files.isDirectory(DIR_PATH))
+                Files.createDirectories(DIR_PATH);
+            Path file = DIR_PATH.resolve(FILE_NAME);
             Path tempFile = file.resolveSibling(file.getFileName() + ".tmp");
-            try (OutputStreamWriter writer = new OutputStreamWriter(
-                    new FileOutputStream(tempFile.toFile()), StandardCharsets.UTF_8)) {
+            try (
+                    OutputStreamWriter writer = new OutputStreamWriter(
+                            new FileOutputStream(tempFile.toFile()),
+                            StandardCharsets.UTF_8
+                    )
+            ) {
                 writer.write(GSON.toJson(instance));
             } catch (IOException e) {
                 throw new IOException(e);
             }
-            Files.move(tempFile, file, StandardCopyOption.ATOMIC_MOVE,
-                    StandardCopyOption.REPLACE_EXISTING);
+            Files.move(
+                    tempFile,
+                    file,
+                    StandardCopyOption.ATOMIC_MOVE,
+                    StandardCopyOption.REPLACE_EXISTING
+            );
             NoCapes.onConfigSaved(instance);
         } catch (IOException e) {
             NoCapes.LOG.error("Unable to save config", e);
