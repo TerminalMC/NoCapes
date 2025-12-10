@@ -24,7 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -45,7 +45,7 @@ public class NoCapes {
             .append(Component.literal("] ").withStyle(ChatFormatting.DARK_GRAY))
             .withStyle(ChatFormatting.GRAY);
 
-    public static final Map<ResourceLocation, String> RESOURCE_CAPE_CACHE = new HashMap<>();
+    public static final Map<Identifier, String> RESOURCE_CAPE_CACHE = new HashMap<>();
 
     public static void init() {
         Config config = Config.getAndSave();
@@ -67,7 +67,7 @@ public class NoCapes {
         // Cache update method
     }
 
-    public static boolean blockCape(ResourceLocation location) {
+    public static boolean blockCape(Identifier location) {
         if (options().hideEverything)
             return true;
         if (RESOURCE_CAPE_CACHE.containsKey(location)) {
@@ -78,7 +78,7 @@ public class NoCapes {
         return false;
     }
 
-    public static boolean blockElytra(ResourceLocation location) {
+    public static boolean blockElytra(Identifier location) {
         if (options().hideEverything)
             return true;
         if (RESOURCE_CAPE_CACHE.containsKey(location)) {
