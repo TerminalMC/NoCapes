@@ -1,6 +1,5 @@
 # Changelog
 
-## 1.102.0
+## 1.103.0
 
-- Updated to mc26.1
-- Updated cape list
+- Updated to mc26.2

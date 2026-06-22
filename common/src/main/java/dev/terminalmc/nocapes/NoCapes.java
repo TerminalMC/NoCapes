@@ -115,7 +115,7 @@ public class NoCapes {
 
     public static void checkInConfig(String capeId, String url) {
         if (!options().capes.containsKey(capeId)) {
-            Minecraft.getInstance().gui.getChat().addClientSystemMessage(PREFIX.copy().append(
+            Minecraft.getInstance().gui.hud.getChat().addClientSystemMessage(PREFIX.copy().append(
                     localized(
                             "message",
                             "unknownCape",
