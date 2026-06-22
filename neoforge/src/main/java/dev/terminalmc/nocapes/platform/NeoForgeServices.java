@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 TerminalMC
+ * Copyright 2026 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,15 @@
 
 package dev.terminalmc.nocapes.platform;
 
-import dev.terminalmc.nocapes.platform.services.IPlatformServices;
+import dev.terminalmc.nocapes.platform.services.PlatformServices;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.fml.loading.moddiscovery.ModInfo;
 
+import javax.annotation.Nullable;
 import java.nio.file.Path;
 
-public class NeoForgeServices implements IPlatformServices {
+public class NeoForgeServices implements PlatformServices {
 
     @Override
     public boolean isDevEnv() {
@@ -32,6 +34,21 @@ public class NeoForgeServices implements IPlatformServices {
     @Override
     public boolean isModLoaded(String modId) {
         return FMLLoader.getCurrent().getLoadingModList().getModFileById(modId) != null;
+    }
+
+    @Override
+    public boolean hasNamedLogger() {
+        return true;
+    }
+
+    @Override
+    public @Nullable String getModVersion(String modId) {
+        for (ModInfo mod : FMLLoader.getCurrent().getLoadingModList().getMods()) {
+            if (mod.getModId().equals(modId)) {
+                return mod.getVersion().toString();
+            }
+        }
+        return null;
     }
 
     @Override

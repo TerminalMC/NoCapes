@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 TerminalMC
+ * Copyright 2026 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import java.util.concurrent.CompletableFuture;
 
 @Mixin(SkinManager.class)
-public class MixinSkinManager {
+public abstract class SkinManagerMixin {
 
+    /**
+     * Caches capes.
+     */
     @WrapOperation(
             method = "registerTextures",
             at = @At(
@@ -40,12 +43,16 @@ public class MixinSkinManager {
             )
     )
     private CompletableFuture<ClientAsset.Texture> wrapLoadCape(
-            SkinManager.TextureCache instance, MinecraftProfileTexture texture,
+            SkinManager.TextureCache instance,
+            MinecraftProfileTexture texture,
             Operation<CompletableFuture<ClientAsset.Texture>> original
     ) {
         return noCapes$wrapLoadTexture(instance, texture, original);
     }
 
+    /**
+     * Caches elytra.
+     */
     @WrapOperation(
             method = "registerTextures",
             at = @At(
@@ -55,7 +62,8 @@ public class MixinSkinManager {
             )
     )
     private CompletableFuture<ClientAsset.Texture> wrapLoadElytra(
-            SkinManager.TextureCache instance, MinecraftProfileTexture texture,
+            SkinManager.TextureCache instance,
+            MinecraftProfileTexture texture,
             Operation<CompletableFuture<ClientAsset.Texture>> original
     ) {
         return noCapes$wrapLoadTexture(instance, texture, original);
@@ -63,7 +71,8 @@ public class MixinSkinManager {
 
     @Unique
     private CompletableFuture<ClientAsset.Texture> noCapes$wrapLoadTexture(
-            SkinManager.TextureCache instance, MinecraftProfileTexture texture,
+            SkinManager.TextureCache instance,
+            MinecraftProfileTexture texture,
             Operation<CompletableFuture<ClientAsset.Texture>> original
     ) {
         return original.call(instance, texture).thenApply((asset) -> {

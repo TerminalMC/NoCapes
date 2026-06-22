@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 TerminalMC
+ * Copyright 2026 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,68 @@
 
 package dev.terminalmc.nocapes;
 
+import dev.terminalmc.nocapes.command.Commands;
 import dev.terminalmc.nocapes.gui.screen.ConfigScreenProvider;
+import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 @Mod(
         value = NoCapes.MOD_ID,
         dist = Dist.CLIENT
 )
+@EventBusSubscriber(
+        modid = NoCapes.MOD_ID,
+        value = Dist.CLIENT
+)
 public class NoCapesNeoForge {
 
     public NoCapesNeoForge() {
-        // Config screen
+        // Register config screen
         ModLoadingContext.get().registerExtensionPoint(
                 IConfigScreenFactory.class,
                 () -> (mc, parent) -> ConfigScreenProvider.getConfigScreen(parent)
         );
 
-        // Main initialization
+        // Initialize client
         NoCapes.init();
+    }
+
+    /**
+     * Registers all keybinds.
+     */
+    @SubscribeEvent
+    static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+        NoCapes.KEYBINDS.forEach(event::register);
+    }
+
+    @EventBusSubscriber(
+            modid = NoCapes.MOD_ID,
+            value = Dist.CLIENT
+    )
+    static class ClientEventHandler {
+
+        /**
+         * Registers all client-side commands.
+         */
+        @SubscribeEvent
+        static void registerClientCommands(RegisterClientCommandsEvent event) {
+            Commands.register(event.getDispatcher(), event.getBuildContext());
+        }
+
+        /**
+         * Registers client after-tick event.
+         */
+        @SubscribeEvent
+        public static void registerAfterClientTick(ClientTickEvent.Post event) {
+            NoCapes.afterClientTick(Minecraft.getInstance());
+        }
     }
 }

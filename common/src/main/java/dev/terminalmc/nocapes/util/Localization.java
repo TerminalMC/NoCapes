@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 TerminalMC
+ * Copyright 2026 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,12 @@ import dev.terminalmc.nocapes.NoCapes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
-public final class Localization {
+@SuppressWarnings("unused")
+public class Localization {
+
+    private Localization() {
+        throw new UnsupportedOperationException("This class cannot be instantiated.");
+    }
 
     public static String translationKey(String path) {
         return NoCapes.MOD_ID + "." + path;

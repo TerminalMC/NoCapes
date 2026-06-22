@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 TerminalMC
+ * Copyright 2026 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,10 @@ import static dev.terminalmc.nocapes.util.Localization.localized;
 
 public class ClothScreenProvider {
 
+    private ClothScreenProvider() {
+        throw new UnsupportedOperationException("This class cannot be instantiated.");
+    }
+
     /**
      * Builds and returns a Cloth Config options screen.
      *
@@ -35,7 +39,7 @@ public class ClothScreenProvider {
      * @throws NoClassDefFoundError if the Cloth Config API mod is not available.
      */
     static Screen getConfigScreen(Screen parent) {
-        Config.Options options = Config.get().options;
+        Config.Options options = Config.options();
 
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)
@@ -43,19 +47,18 @@ public class ClothScreenProvider {
                 .setSavingRunnable(Config::save);
         ConfigEntryBuilder eb = builder.entryBuilder();
 
-        ConfigCategory modSettings =
-                builder.getOrCreateCategory(localized("option", "category.cape_render"));
+        ConfigCategory general = builder.getOrCreateCategory(localized("option", "general"));
 
-        modSettings.addEntry(eb.startBooleanToggle(
-                        localized("option", "hideEverything"),
+        general.addEntry(eb.startBooleanToggle(
+                        localized("option", "general.hideEverything"),
                         options.hideEverything
                 )
-                .setTooltip(localized("option", "hideEverything.tooltip"))
+                .setTooltip(localized("option", "general.hideEverything.tooltip"))
                 .setDefaultValue(Config.Options.hideEverythingDefault)
                 .setSaveConsumer(val -> options.hideEverything = val)
                 .build());
 
-        SubCategoryBuilder capeGroup = eb.startSubCategory(localized("option", "individualCapes"))
+        SubCategoryBuilder capeGroup = eb.startSubCategory(localized("option", "general.individualCapes"))
                 .setExpanded(!options.hideEverything);
 
         for (String url : options.capes.keySet()) {
@@ -66,14 +69,14 @@ public class ClothScreenProvider {
                     )
                     .setTextGetter((val) -> {
                         Config.ShowMode m = Config.ShowMode.values()[val];
-                        return localized("option", "showMode." + m).withStyle(m.format);
+                        return localized("option", "general.showMode." + m).withStyle(m.format);
                     })
                     .setDefaultValue(0)
                     .setSaveConsumer(val -> options.capes.put(url, Config.ShowMode.values()[val]))
                     .build());
         }
 
-        modSettings.addEntry(capeGroup.build());
+        general.addEntry(capeGroup.build());
 
         return builder.build();
     }

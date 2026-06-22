@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 TerminalMC
+ * Copyright 2026 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,20 @@ package dev.terminalmc.nocapes;
 
 import dev.terminalmc.nocapes.config.Config;
 import dev.terminalmc.nocapes.util.Capes;
-import dev.terminalmc.nocapes.util.ModLogger;
+import dev.terminalmc.nocapes.util.Logging;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import static dev.terminalmc.nocapes.config.Config.options;
@@ -38,36 +41,57 @@ public class NoCapes {
 
     public static final String MOD_ID = "nocapes";
     public static final String MOD_NAME = "NoCapes";
-    public static final ModLogger LOG = new ModLogger(MOD_NAME);
+    public static final Logger LOG = Logging.getLogger(MOD_ID);
     public static final Component PREFIX = Component.empty()
             .append(Component.literal("[").withStyle(ChatFormatting.DARK_GRAY))
             .append(Component.literal(MOD_NAME).withStyle(ChatFormatting.GOLD))
             .append(Component.literal("] ").withStyle(ChatFormatting.DARK_GRAY))
             .withStyle(ChatFormatting.GRAY);
+    public static final List<KeyMapping> KEYBINDS = List.of();
 
-    public static final Map<ResourceLocation, String> RESOURCE_CAPE_CACHE = new HashMap<>();
+    public static final Map<Identifier, String> RESOURCE_CAPE_CACHE = new HashMap<>();
 
+    private NoCapes() {
+        throw new UnsupportedOperationException("This class cannot be instantiated.");
+    }
+
+    /**
+     * Client initialization.
+     */
     public static void init() {
-        Config config = Config.getAndSave();
+        Config.getAndSave();
         // Use hardcoded list to maintain ordering
         Map<String, Config.ShowMode> capes = new LinkedHashMap<>();
         for (String id : Capes.CAPES) {
             Config.ShowMode mode = Config.ShowMode.BOTH;
-            if (config.options.capes.containsKey(id)) {
-                mode = config.options.capes.remove(id);
+            if (options().capes.containsKey(id)) {
+                mode = options().capes.remove(id);
             }
             capes.put(id, mode);
         }
         // Add unknown capes to the end
-        capes.putAll(config.options.capes);
-        config.options.capes = capes;
+        capes.putAll(options().capes);
+        options().capes = capes;
     }
 
+    /**
+     * Client after-tick event listener.
+     */
+    public static void afterClientTick(Minecraft mc) {
+    }
+
+    /**
+     * Config save listener.
+     */
     public static void onConfigSaved(Config config) {
-        // Cache update method
+        // If you are maintaining caches based on config, update them here.
     }
 
-    public static boolean blockCape(ResourceLocation location) {
+    //
+    // Cape filtering
+    //
+
+    public static boolean blockCape(Identifier location) {
         if (options().hideEverything)
             return true;
         if (RESOURCE_CAPE_CACHE.containsKey(location)) {
@@ -78,7 +102,7 @@ public class NoCapes {
         return false;
     }
 
-    public static boolean blockElytra(ResourceLocation location) {
+    public static boolean blockElytra(Identifier location) {
         if (options().hideEverything)
             return true;
         if (RESOURCE_CAPE_CACHE.containsKey(location)) {
@@ -91,10 +115,11 @@ public class NoCapes {
 
     public static void checkInConfig(String capeId, String url) {
         if (!options().capes.containsKey(capeId)) {
-            Minecraft.getInstance().gui.getChat().addMessage(PREFIX.copy().append(
+            Minecraft.getInstance().gui.getChat().addClientSystemMessage(PREFIX.copy().append(
                     localized(
-                            "message", "unknownCape", Component.literal(
-                                            capeId.substring(Math.max(0, capeId.length() - 5)))
+                            "message",
+                            "unknownCape",
+                            Component.literal(capeId.substring(Math.max(0, capeId.length() - 5)))
                                     .withStyle(ChatFormatting.WHITE)
                     )).withStyle(PREFIX.getStyle()
                     .withHoverEvent(new HoverEvent.ShowText(localized("message", "clickToCopy")))

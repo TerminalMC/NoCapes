@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 TerminalMC
+ * Copyright 2026 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,27 @@
 
 package dev.terminalmc.nocapes;
 
+import dev.terminalmc.nocapes.command.Commands;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 
+@SuppressWarnings("unused")
 public class NoCapesFabric implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        // Main initialization
+        // Register keybinds
+        NoCapes.KEYBINDS.forEach(KeyMappingHelper::registerKeyMapping);
+
+        // Register client commands
+        ClientCommandRegistrationCallback.EVENT.register(Commands::register);
+
+        // Register client after-tick event
+        ClientTickEvents.END_CLIENT_TICK.register(NoCapes::afterClientTick);
+
+        // Initialize client
         NoCapes.init();
     }
 }

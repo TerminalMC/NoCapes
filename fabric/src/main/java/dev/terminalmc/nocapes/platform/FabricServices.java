@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 TerminalMC
+ * Copyright 2026 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 
 package dev.terminalmc.nocapes.platform;
 
-import dev.terminalmc.nocapes.platform.services.IPlatformServices;
+import dev.terminalmc.nocapes.platform.services.PlatformServices;
 import net.fabricmc.loader.api.FabricLoader;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 
-public class FabricServices implements IPlatformServices {
+public class FabricServices implements PlatformServices {
 
     @Override
     public boolean isDevEnv() {
@@ -31,6 +32,19 @@ public class FabricServices implements IPlatformServices {
     @Override
     public boolean isModLoaded(String modId) {
         return FabricLoader.getInstance().isModLoaded(modId);
+    }
+
+    @Override
+    public boolean hasNamedLogger() {
+        return false;
+    }
+
+    @Override
+    public @Nullable String getModVersion(String modId) {
+        return FabricLoader.getInstance()
+                .getModContainer(modId)
+                .map(mod -> mod.getMetadata().getVersion().getFriendlyString())
+                .orElse(null);
     }
 
     @Override

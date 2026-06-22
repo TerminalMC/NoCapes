@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 TerminalMC
+ * Copyright 2026 TerminalMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package dev.terminalmc.nocapes.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.terminalmc.nocapes.NoCapes;
-import dev.terminalmc.nocapes.platform.Services;
+import dev.terminalmc.nocapes.platform.services.PlatformServices;
 import dev.terminalmc.nocapes.util.Capes;
 import net.minecraft.ChatFormatting;
 import org.jetbrains.annotations.NotNull;
@@ -35,10 +35,14 @@ import java.util.Map;
 
 public class Config {
 
-    private static final Path DIR_PATH = Services.PLATFORM.getConfigDir();
+    private static final Path DIR_PATH = PlatformServices.getInstance().getConfigDir();
     private static final String FILE_NAME = NoCapes.MOD_ID + ".json";
     private static final String BACKUP_FILE_NAME = NoCapes.MOD_ID + ".unreadable.json";
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
+    private Config() {
+        // Deserializer and self-instantiation only.
+    }
 
     // Options
 

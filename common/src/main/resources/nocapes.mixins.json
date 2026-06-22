@@ -1,16 +1,19 @@
 {
   "required": true,
-  "minVersion": "0.8",
+  "minVersion": "${mixin_version_min}",
   "package": "dev.terminalmc.nocapes.mixin",
-  "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_${java_version}",
+  "plugin": "dev.terminalmc.nocapes.util.MixinConfigPlugin",
+  "mixinextras": {
+    "minVersion": "${mixinextras_version_min}"
+  },
   "mixins": [
   ],
   "client": [
-    "MixinCapeLayer",
-    "MixinClientPacketListener",
-    "MixinSkinManager",
-    "MixinWingsLayer"
+    "CapeLayerMixin",
+    "ClientPacketListenerMixin",
+    "SkinManagerMixin",
+    "WingsLayerMixin"
   ],
   "server": [
   ],
