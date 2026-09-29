@@ -3,7 +3,7 @@
 
   "modmenu.nameTranslation.nocapes": "NoCapes",
   "modmenu.descriptionTranslation.nocapes": "Условно скрывает любые/все плащи в Minecraft и специальные текстуры элитр.",
-  "fml.menu.mods.info.description.nocapes": "Условно скрывает любые/все плащи в Minecraft и специальные текстуры элитр.",
+  "neoforge.screen.mods.info.description.nocapes": "Условно скрывает любые/все плащи в Minecraft и специальные текстуры элитр.",
 
   "message.nocapes.viewModrinth": "Открыть на Modrinth",
   "message.nocapes.installCloth": "Установите Cloth Config API для доступа к параметрам мода.",
