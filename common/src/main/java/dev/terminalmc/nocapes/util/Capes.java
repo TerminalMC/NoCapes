@@ -31,6 +31,8 @@ public class Capes {
         print(f"https://textures.minecraft.net/texture/{hashlib.sha256(file.read()).hexdigest()}")
      */
     public static final String[] CAPES = {
+            // Aurora
+            "7c418dfbd37412a55e9f1425c9807a591ad10cf71b1edb576a587be9114c277f",
             // Twisted
             "24aafc451aa2cc34ddc7265211678585c0ef4da4d32edb75ecec1bd8b5408381",
             // Hero
